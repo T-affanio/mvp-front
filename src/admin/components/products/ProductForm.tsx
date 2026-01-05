@@ -10,6 +10,7 @@ import { useCreateProduct } from "@/admin/hooks/Products-Categories/useCreatePro
 import { CategorySelect } from "./CategorySelect";
 import { CreateCategoryForm } from "./CreateCategoryForm";
 import { ImageUpload } from "./ImageUpload";
+import { Variation } from "@/admin/types/product";
 
 type Props = {
   onClose?: () => void;
@@ -29,29 +30,36 @@ export default function ProductForm({ onClose }: Props) {
   const { createProduct } = useCreateProduct();
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!name || !categoryId) return;
+  e.preventDefault();
+  if (!name || !categoryId) return;
 
-    setLoading(true);
+  setLoading(true);
 
-    try {
-      await createProduct({
-        name,
-        description,
-        categoryId,
-        variations,
-        images: image ? [image] : [],
-        onSuccess: () => {
-          alert("Produto criado com sucesso ✅");
-          onClose?.();
-        },
-      });
-    } catch {
-      alert("Erro ao criar produto ❌");
-    } finally {
-      setLoading(false);
-    }
+  try {
+    const formattedVariations: Variation[] = variations.map((v, index) => ({
+      id: v.id ?? index, // ✅ garante id
+      name: v.name,
+      price: Number(v.price),
+    }));
+
+    await createProduct({
+      name,
+      description,
+      categoryId,
+      variations: formattedVariations, // ✅ agora bate com a API
+      images: image ? [image] : [],
+      onSuccess: () => {
+        alert("Produto criado com sucesso ✅");
+        onClose?.();
+      },
+    });
+  } catch {
+    alert("Erro ao criar produto ❌");
+  } finally {
+    setLoading(false);
   }
+}
+
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center px-4">

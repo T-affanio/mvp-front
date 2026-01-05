@@ -1,18 +1,7 @@
-export type Product = {
-  id: string;
+export type FormVariation = {
+  id?: number; // ✅ opcional
   name: string;
-  description: string;
   price: number;
-  variations: Variation[];
-  categoryId: string; // ajuste se o backend usar outro nome
-
-  images?: {
-    url: string;
-  }[];
-};
-export type Category = {
-  id: string;
-  name: string;
 };
 
 export type CreateVariationDTO = {
@@ -21,13 +10,24 @@ export type CreateVariationDTO = {
 };
 
 export type Variation = {
-  id: number;
+  id: number; // ✅ obrigatório (backend)
   name: string;
   price: number;
 };
-// types/FormVariation.ts
-export type FormVariation = {
-  id: number
+
+export type Product = {
+  id: string;
   name: string;
+  description: string;
   price: number;
+  variations: Variation[];
+  categoryId: string;
+  images?: {
+    url: string;
+  }[];
+};
+
+export type Category = {
+  id: string;
+  name: string;
 };

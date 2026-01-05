@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import { OrderDash } from "../types/Orders";
+import { Order } from "../types/Orders";
 
-export function useDashboardMetrics(orders: OrderDash[]) {
+export function useDashboardMetrics(orders: Order[]) {
   return useMemo(() => {
     const now = new Date();
 
