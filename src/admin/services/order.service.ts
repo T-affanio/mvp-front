@@ -1,5 +1,6 @@
 import { api } from "../../shared/api/api";
-import { Order, OrderStatus } from "../types/Orders";
+import { Order } from "../types/Orders";
+import { OrderStatus } from "../types/OrderStatus";
 import { normalizeOrder } from "../utils/orders/Nomalizer";
 import { CreateOrderDTO } from "@/client/types/CreateOrderDTO";
 
@@ -14,11 +15,8 @@ export async function updateOrderStatus(
 ): Promise<void> {
   await api.patch(`/orders/${orderId}/status`, { status });
 }
-export async function createOrder(payload:CreateOrderDTO) {
-  const { data } = await api.post(
-    "/orders",
-    payload
-  );
+export async function createOrder(payload: CreateOrderDTO) {
+  const { data } = await api.post("/orders", payload);
 
   return data;
 }

@@ -1,7 +1,8 @@
 "use client";
 
 import { useOrders } from "@/admin/hooks/order/useOrders";
-import { Order, OrderStatus } from "@/admin/types/Orders";
+import { Order } from "@/admin/types/Orders";
+import { OrderStatus } from "@/admin/types/OrderStatus";
 import { useState } from "react";
 import OrderRow from "./OrderRow";
 import OrderDrawer from "./OrderDrawer";

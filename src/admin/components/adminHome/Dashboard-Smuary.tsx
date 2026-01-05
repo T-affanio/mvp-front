@@ -3,10 +3,10 @@
 import { api } from "@/shared/api/api";
 import { useEffect, useState } from "react";
 import { useDashboardMetrics } from "../../hooks/useDashboardMetrics";
-import { OrderDash } from "../../types/Orders";
+import { Order } from "@/admin/types/Orders";
 
 export const DashboardSummary = () => {
-  const [orders, setOrders] = useState<OrderDash[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
 
   async function loadOrders() {
     try {

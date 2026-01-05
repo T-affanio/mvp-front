@@ -2,7 +2,8 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { getOrders } from "../../services/order.service";
-import { Order, OrderStatus } from "@/admin/types/Orders";
+import { Order } from "@/admin/types/Orders";
+import { OrderStatus } from "@/admin/types/OrderStatus";
 
 const STORAGE_KEY = "orders:lastKnownIds";
 
@@ -14,10 +15,7 @@ function toDateKey(date: string | Date) {
   )}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
-export function useOrders(
-  status: OrderStatus | "ALL",
-  selectedDate: string
-) {
+export function useOrders(status: OrderStatus | "ALL", selectedDate: string) {
   const [orders, setOrders] = useState<Order[]>([]);
   const [highlightIds, setHighlightIds] = useState<string[]>([]);
 
@@ -41,14 +39,12 @@ export function useOrders(
     try {
       const data = await getOrders();
 
-      const currentIds = new Set(data.map(o => o.id));
-      const newOrders = data.filter(
-        o => !previousIds.current.has(o.id)
-      );
+      const currentIds = new Set(data.map((o) => o.id));
+      const newOrders = data.filter((o) => !previousIds.current.has(o.id));
 
       if (!isFirstLoad.current && newOrders.length > 0) {
         playSound();
-        setHighlightIds(newOrders.map(o => o.id));
+        setHighlightIds(newOrders.map((o) => o.id));
         setTimeout(() => setHighlightIds([]), 4000);
       }
 
@@ -73,20 +69,16 @@ export function useOrders(
     status === "ALL"
       ? orders
       : status === "CONFIRMED"
-      ? orders.filter(
-          o => o.status === "PENDING" || o.status === "CONFIRMED"
-        )
-      : orders.filter(o => o.status === status);
+      ? orders.filter((o) => o.status === "PENDING" || o.status === "CONFIRMED")
+      : orders.filter((o) => o.status === status);
 
   /* FILTRO DATA */
   const dailyOrders = statusFiltered.filter(
-    o => toDateKey(o.createdAt) === selectedDate
+    (o) => toDateKey(o.createdAt) === selectedDate
   );
 
   const sortedOrders = [...dailyOrders].sort(
-    (a, b) =>
-      new Date(a.createdAt).getTime() -
-      new Date(b.createdAt).getTime()
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
   );
 
   return {
