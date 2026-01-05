@@ -5,13 +5,16 @@
   --foreground: #171717;
 }
 
+/* 🌐 TEMA GLOBAL */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  /* 🔤 FONTE GLOBAL */
+  --font-sans: var(--font-sans);
 }
 
+/* 🌙 DARK MODE */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -19,8 +22,69 @@
   }
 }
 
+/* 🧠 BODY */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* ✨ UTILIDADES */
+@layer utilities {
+  .text-shadow-title {
+    text-shadow:
+      0 2px 2px rgba(0, 0, 0, 0.35),
+      0 2px 6px rgba(0, 0, 0, 0.25);
+  }
+}
+
+/* 🖨️ PRINT */
+.print-area {
+  display: none;
+}
+
+.no-print {
+  display: block;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .print-area,
+  .print-area * {
+    visibility: visible;
+  }
+
+  .print-area {
+    position: fixed;
+    inset: 0;
+    background: white;
+    color: black;
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* 🎬 ANIMAÇÕES */
+@keyframes slide-in {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.4s ease-out;
 }
