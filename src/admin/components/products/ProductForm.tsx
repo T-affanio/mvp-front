@@ -10,7 +10,8 @@ import { useCreateProduct } from "@/admin/hooks/Products-Categories/useCreatePro
 import { CategorySelect } from "./CategorySelect";
 import { CreateCategoryForm } from "./CreateCategoryForm";
 import { ImageUpload } from "./ImageUpload";
-import { Variation } from "@/admin/types/product";
+
+import { CreateVariationDTO } from "@/admin/types/product";
 
 type Props = {
   onClose?: () => void;
@@ -24,20 +25,18 @@ export default function ProductForm({ onClose }: Props) {
   const [loading, setLoading] = useState(false);
 
   const { categories, setCategories, creating, setCreating } = useCategories();
-
   const { variations, update, add, remove } = useVariations();
-
   const { createProduct } = useCreateProduct();
 
-  async function handleSubmit(e: React.FormEvent) {
+ async function handleSubmit(e: React.FormEvent) {
   e.preventDefault();
   if (!name || !categoryId) return;
 
   setLoading(true);
 
   try {
-    const formattedVariations: Variation[] = variations.map((v, index) => ({
-      id: v.id ?? index, // ✅ garante id
+    // 🔥 conversão correta
+    const formattedVariations: CreateVariationDTO[] = variations.map((v) => ({
       name: v.name,
       price: Number(v.price),
     }));
@@ -46,40 +45,38 @@ export default function ProductForm({ onClose }: Props) {
       name,
       description,
       categoryId,
-      variations: formattedVariations, // ✅ agora bate com a API
+      variations: formattedVariations,
       images: image ? [image] : [],
       onSuccess: () => {
         alert("Produto criado com sucesso ✅");
         onClose?.();
       },
     });
-  } catch {
+  } catch (err) {
+    console.error(err);
     alert("Erro ao criar produto ❌");
   } finally {
     setLoading(false);
   }
 }
-
-
   return (
     <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center px-4">
       <form
         onSubmit={handleSubmit}
         className="
-        relative 
-        w-full 
-        max-w-2xl 
-        bg-white 
-        rounded-2xl 
-        shadow-lg 
-        p-8 
-        space-y-4 
-        text-black
-        max-h-[90vh]
-        overflow-y-auto
-      "
+          relative 
+          w-full 
+          max-w-2xl 
+          bg-white 
+          rounded-2xl 
+          shadow-lg 
+          p-8 
+          space-y-4 
+          text-black
+          max-h-[90vh]
+          overflow-y-auto
+        "
       >
-        {/* FECHAR */}
         {onClose && (
           <button
             type="button"
@@ -90,7 +87,6 @@ export default function ProductForm({ onClose }: Props) {
           </button>
         )}
 
-        {/* HEADER */}
         <div>
           <h1 className="text-2xl font-semibold">Novo Produto</h1>
           <p className="text-sm text-gray-500">
@@ -98,7 +94,6 @@ export default function ProductForm({ onClose }: Props) {
           </p>
         </div>
 
-        {/* NOME */}
         <div className="space-y-1">
           <label className="text-sm font-medium">Nome do produto</label>
           <input
@@ -109,7 +104,6 @@ export default function ProductForm({ onClose }: Props) {
           />
         </div>
 
-        {/* VARIAÇÕES */}
         <div className="space-y-2">
           <label className="text-sm font-medium">Tamanhos / Variações</label>
 
@@ -151,17 +145,15 @@ export default function ProductForm({ onClose }: Props) {
           </button>
         </div>
 
-        {/* DESCRIÇÃO */}
         <div className="space-y-1">
           <label className="text-sm font-medium">Descrição</label>
           <textarea
-            className="w-full rounded-lg border px-3 py-2 min-h-[100]"
+            className="w-full rounded-lg border px-3 py-2 min-h-[100px]"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>
 
-        {/* CATEGORIA */}
         <div className="space-y-2">
           <label className="text-sm font-medium">Categoria</label>
 
@@ -184,10 +176,8 @@ export default function ProductForm({ onClose }: Props) {
           )}
         </div>
 
-        {/* IMAGEM */}
         <ImageUpload image={image} onChange={setImage} />
 
-        {/* AÇÕES */}
         <div className="pt-4 flex justify-end gap-3">
           {onClose && (
             <button

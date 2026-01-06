@@ -1,7 +1,7 @@
 "use client";
 
-import { FormVariation } from "@/admin/types/product";
 import { useState } from "react";
+import { FormVariation } from "@/admin/types/product";
 
 export function useVariations() {
   const [variations, setVariations] = useState<FormVariation[]>([
@@ -13,7 +13,7 @@ export function useVariations() {
     field: keyof FormVariation,
     value: string | number
   ) {
-    setVariations(vs =>
+    setVariations((vs) =>
       vs.map((v, i) =>
         i === index ? { ...v, [field]: value } : v
       )
@@ -21,11 +21,11 @@ export function useVariations() {
   }
 
   function add() {
-    setVariations(vs => [...vs, { name: "", price: 0 }]);
+    setVariations((vs) => [...vs, { name: "", price: 0 }]);
   }
 
   function remove(index: number) {
-    setVariations(vs => vs.filter((_, i) => i !== index));
+    setVariations((vs) => vs.filter((_, i) => i !== index));
   }
 
   return { variations, update, add, remove };

@@ -1,6 +1,7 @@
 "use client";
 
 import { Variation } from "@/admin/types/product";
+import { api } from "@/shared/api/api";
 import axios from "axios";
 
 type Params = {
@@ -42,7 +43,7 @@ export function useCreateProduct() {
 
     images.forEach(img => formData.append("images", img));
 
-    await axios.post("http://localhost:8080/products", formData, {
+    await api.post("/products", formData, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
